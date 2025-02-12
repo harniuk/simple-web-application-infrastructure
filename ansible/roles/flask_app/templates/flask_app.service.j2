@@ -1,0 +1,12 @@
+[Unit]
+Description=Flask App
+After=network.target
+
+[Service]
+User=azureuser
+WorkingDirectory={{ flask_app_dir }}
+ExecStart={{ flask_app_dir }}/venv/bin/python app.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

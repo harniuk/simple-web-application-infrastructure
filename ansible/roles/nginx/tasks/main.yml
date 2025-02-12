@@ -1,0 +1,23 @@
+---
+- name: Configure Nginx
+  ansible.builtin.template:
+    src: flask_app.conf.j2
+    dest: /etc/nginx/sites-available/flask_app
+    mode: '0644'
+
+- name: Enable Nginx configuration
+  ansible.builtin.file:
+    src: /etc/nginx/sites-available/flask_app
+    dest: /etc/nginx/sites-enabled/flask_app
+    state: link
+    force: true
+
+- name: Remove default Nginx configuration
+  ansible.builtin.file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+
+- name: Restart Nginx
+  ansible.builtin.systemd:
+    name: nginx
+    state: restarted

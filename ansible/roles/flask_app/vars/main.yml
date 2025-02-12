@@ -1,0 +1,3 @@
+---
+flask_app_flask_repo: "https://github.com/harniuk/simple-pfa.git"
+flask_app_dir: /opt/flask_app

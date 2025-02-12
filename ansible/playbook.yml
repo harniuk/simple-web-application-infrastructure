@@ -1,0 +1,10 @@
+---
+- name: Setup Flask App with Nginx and Node exporter
+  hosts: web_servers
+  become: true
+
+  roles:
+    - common
+    - flask_app
+    - nginx
+    - node_exporter

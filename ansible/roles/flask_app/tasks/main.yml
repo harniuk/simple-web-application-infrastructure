@@ -1,0 +1,32 @@
+---
+- name: Clone Flask app repository
+  ansible.builtin.git:
+    repo: "{{ flask_app_flask_repo }}"
+    dest: "{{ flask_app_dir }}"
+    version: main
+    force: true
+    accept_hostkey: true
+
+- name: Create a Python virtual environment
+  ansible.builtin.command: python3 -m venv {{ flask_app_dir }}/venv
+  args:
+    creates: "{{ flask_app_dir }}/venv/bin/activate"
+
+- name: Install dependencies from requirements.txt
+  ansible.builtin.pip:
+    requirements: "{{ flask_app_dir }}/requirements.txt"
+    virtualenv: "{{ flask_app_dir }}/venv"
+    virtualenv_command: python3 -m venv
+
+- name: Create a systemd service for Flask
+  ansible.builtin.template:
+    src: flask_app.service.j2
+    dest: /etc/systemd/system/flask_app.service
+    mode: '0644'
+
+- name: Reload systemd and enable Flask service
+  ansible.builtin.systemd:
+    daemon_reload: true
+    name: flask_app
+    enabled: true
+    state: started
